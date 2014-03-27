@@ -1,0 +1,2 @@
+rsync -qaH --delete-after --rsh=/usr/bin/ssh mysqlprod01:/data/binlog /backup/mysqlprod01/
+rsync -qaH --delete-after --rsh=/usr/bin/ssh ctscproddb01:/data/binlog /backup/ctscproddb01/
