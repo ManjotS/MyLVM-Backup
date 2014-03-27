@@ -23,12 +23,16 @@ The idea is like this:
 Steps to setup:
 
 1. We will use another hard disk to mount **/data** via logical volume. Lets create the partition first:
+
 `$ fdisk /dev/sdb`
+
 Sequence pressed on keyboard: n > p > 1 > Enter > Enter > w
 
 2. You should see disk partition has been created as **/dev/sdb1** as below:
-`$ fdisk -l /dev/sdb
-Disk /dev/sdb: 11.8 GB, 11811160064 bytes
+
+`$ fdisk -l /dev/sdb`
+`Disk /dev/sdb: 11.8 GB, 11811160064 bytes`
+
 255 heads, 63 sectors/track, 1435 cylinders
 Units = cylinders of 16065 * 512 = 8225280 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
