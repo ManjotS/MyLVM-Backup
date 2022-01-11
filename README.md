@@ -25,7 +25,7 @@ Steps to setup:
 1. We will use another hard disk to mount **/data** via logical volume. Lets create the partition first:
 
     ```
-    $ fdisk /dev/sdb`
+    $ fdisk /dev/sdb
     ```
 Sequence pressed on keyboard: n > p > 1 > Enter > Enter > w
 
@@ -184,12 +184,12 @@ Backup Method
 
 MySQL Backups are done using the MySQL Backup shell script in /var/backup/script on the client and the getLVMbackups.sh included in the package on the mysql-backup server.
 
-runScheduledbackups.sh on the backup server manages the backup and logging. It can run from every half hour to every day and cycle through the servers in servers.conf. getLVMbackups logs into each of these servers, runs the mysql-backup.sh script on the server to create a snapshot and then rsyncs the snapshot to the backup server. It then runs delete-snapshot.sh to delete the snapshot on the client.
+`runScheduledbackups.sh` on the backup server manages the backup and logging. It can run from every half hour to every day and cycle through the servers in servers.conf. getLVMbackups logs into each of these servers, runs the mysql-backup.sh script on the server to create a snapshot and then rsyncs the snapshot to the backup server. It then runs delete-snapshot.sh to delete the snapshot on the client.
 
 Once this is complete, the backup server compresses all of the backups, archives and deletes old backups and pushes the updates to TSM via the dsmcad service. This can be changed or removed depending on your backup strategy.
 
 **Server TSM settings:**
-	```
+
 	nano /opt/tivoli/tsm/client/ba/bin/inclexcl
 	
 	exclude /dev/*
@@ -197,13 +197,13 @@ Once this is complete, the backup server compresses all of the backups, archives
 	include /backup/*.tar.gz RDBMS
 	
 	exclude.dir /backup/*
-	```
+	
 
 **Crontab:**
-	```
+
 	16 */4 * * * /var/backup/script/runScheduledBackup.sh > /dev/null
 	5,35 * * * * /var/backup/script/rsync-binlogs.sh >> /var/log/mysql/backup.log
-	```
+
 
 rsync-binlogs.sh is configured to rsync binary logs every half hour from production servers for point in time recovery. This can be configured by editing the script.
 
@@ -214,7 +214,6 @@ Restore Options
 
 The recommended restore method is to log into the server mysql-backup and restore the latest backup there by using it as a vanilla box. **Note: These commands will wipe out the database on mysql-backup. Be sure you are logged into the correct server.**
 
-	```
 	service mysqld stop
 	
 	rm -rF /var/lib/mysql/*
@@ -224,7 +223,6 @@ The recommended restore method is to log into the server mysql-backup and restor
 	mv /tmp/SERVERNAME/mysql/* /var/lib/mysql/
 	
 	service mysqld start
-	```
 
 You now have an online copy of the database. At this point you can replay binary logs to do point in time or do a mysqldump of the data you need
 to recover and scp it to the server in question to restore.
@@ -233,7 +231,6 @@ to recover and scp it to the server in question to restore.
 
 **or you can do**
 
-	```
 	mysqldump --triggers --routines -u root -p --all-databases > full_dump.sql
 	
 	scp myfile.sql root@SERVERNAME:
@@ -247,7 +244,6 @@ to recover and scp it to the server in question to restore.
 	MYSQL> source myfile.sql
 	
 	MYSQL> exit
-	```
 
 Replaying Binary Logs
 ---------------------
